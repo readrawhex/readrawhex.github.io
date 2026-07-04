@@ -11,6 +11,6 @@
 	<title>void park</title>
 </svelte:head>
 
-<div class="w-full font-serif h-full">
+<div class="w-full h-full">
 	{@render children()}
 </div>

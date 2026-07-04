@@ -18,19 +18,18 @@
 	}
 </script>
 
-<div class="fixed flex justify-between p-4">
+<div class="fixed flex justify-between p-4 z-100">
 	<div class="flex gap-1 items-end">
-		<h1 class="text-lg">void park</h1>
-		<p class="text-sm">- miles. github is <a target="_blank" href="https://github.com/readrawhex" class="cursor-pointer underline hover:font-bold">@readrawhex</a></p>
+		<p class="text-sm italic">- miles. github: <a target="_blank" href="https://github.com/readrawhex" class="cursor-pointer underline hover:font-bold">readrawhex</a></p>
 	</div>
 </div>
 
 <div class="flex w-full">
-	<div class="flex-1 overflow-y-scroll pt-12 p-4">
+	<div class="flex-1 overflow-y-scroll pt-12 p-4 fixed min-w-sm">
 		{#each data.pages as data}
-			<div class="cursor-pointer transition-all { currentPage?.folder === data.folder ? 'bg-gray-100 font-semibold' : ''} hover:font-bold hover:bg-gray-200 border-b pt-1 pb-1 flex items-center"
+			<div class="cursor-pointer transition-all { currentPage?.folder === data.folder ? 'bg-gray-100 font-semibold' : ''} hover:bg-gray-200 border-b pt-1 pb-1 flex items-center"
 				onclick={async () => {await setPage(data);}}>
-				<div class="flex items-center gap-2">
+				<div class="flex items-center gap-2 pl-2 pr-2">
 					<p>{data.title}</p>
 					<p class="text-xs opacity-75">{data.date}</p>
 				</div>
@@ -40,23 +39,33 @@
 		{/each}
 	</div>
 	{#if currentPage}
-	<div class="flex-2 overflow-y-scroll p-4" transition:fade={{ duration: 100 }}>
-		{#if currentPage.description}
-		<p>{currentPage.description}</p>
-		{/if}
-		{#each currentPage.stuff as s}
-		<div class="w-fit">
-			{#if s.image}
-			<img class="w-full max-h-192 object-contain" src={`/content/${currentPage.folder}/${s.image}`}/>
+	{#key currentPage.folder}
+	<div class="flex-2 p-4 ml-auto flex flex-col items-end" in:fade={{ duration: 100 }}>
+		<div class="lg:w-fit mr-4 flex flex-col xl:flex-row gap-4">
+			{#if currentPage.description}
+			<p class="text-lg text-right xl:text-left italic font-stretch-ultra-expanded max-w-md ml-auto">{currentPage.description}</p>
 			{/if}
-			{#if s.description}
-			<p>{s.description}</p>
-			{/if}
-			{#if s.link}
-			<a href="{s.link.url}" class="cursor-pointer underline hover:font-bold" title="{s.link.url}">{s.link.label}</a>
-			{/if}
+			<div>
+				{#each currentPage.stuff as s}
+				<div class="pb-4 flex flex-col items-end xl:items-start">
+					{#if s.image}
+					<div class="w-fit">
+						<img class="w-full max-h-192 object-contain" src={`/content/${currentPage.folder}/${s.image}`}/>
+					</div>
+					{/if}
+					<div class="w-fit opacity-75">
+						{#if s.description}
+						<p class="text-sm italic">{s.description}</p>
+						{/if}
+						{#if s.link}
+						<a href="{s.link.url}" class="cursor-pointer italic underline hover:font-bold text-sm" title="{s.link.url}">{s.link.label}</a>
+						{/if}
+					</div>
+				</div>
+				{/each}
+			</div>
 		</div>
-		{/each}
 	</div>
+	{/key}
 	{/if}
 </div>
